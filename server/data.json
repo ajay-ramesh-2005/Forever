@@ -1,0 +1,108 @@
+[
+  {
+    "id": "forever-us-default",
+    "slug": "forever",
+    "title": "Happy Girlfriend's Day Inchara",
+    "girlfriendName": "Inchara",
+    "startDate": "2026-06-12T15:00:00.000Z",
+    "musicUrl": "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-piano-112199.mp3",
+    "musicTitle": "Romantic Piano Melody",
+    "page1": {
+      "title": "We've been together for",
+      "question": "Will you be mine forever? 💖",
+      "subtitle": "Try saying NO... I dare you 😏",
+      "noCaptions": [
+        "Nope 😜",
+        "Catch me first 💨",
+        "You really thought? 🤭",
+        "Hehe 💕",
+        "Not happening 💖",
+        "You can't reject destiny ✨"
+      ]
+    },
+    "page2": {
+      "topMessage": "Awww... That's the sweetest answer ever 🥰",
+      "subtitle": "Click the big heart to fill our Love Meter to 100%!",
+      "targetClicks": 40,
+      "completionPopup": "I'm 100% Yours My Love 💖✨"
+    },
+    "memories": [
+      {
+        "id": "mem-1",
+        "date": "May 29 , 2026",
+        "title": "The Day That Changed Everything!",
+        "description": " I knew my life is going to be completely changed forever.💕",
+        "imageUrl": "/uploads/file-1785522049010-727958071.jpg"
+      },
+      {
+        "id": "mem-2",
+        "date": "June 14 , 2026",
+        "title": "Our First Day Out!",
+        "description": "One of the most happiest day ever!💕",
+        "imageUrl": "/uploads/file-1785522207367-555669120.jpg"
+      },
+      {
+        "id": "mem-3",
+        "date": "June 12 , 2026",
+        "title": "The Day We changed into lovers(Officially)",
+        "description": "One of the unforgettable day ever!💕",
+        "imageUrl": "/uploads/file-1785522194887-602148586.jpg"
+      },
+      {
+        "id": "mem-1785520252283",
+        "date": "June 26 , 2026",
+        "title": "Our first Lip Kiss🫣 ",
+        "description": "New Romantic Memory 💕",
+        "imageUrl": "/uploads/file-1785522217902-843066545.jpg"
+      },
+      {
+        "id": "mem-1785520296629",
+        "date": "June 27 , 2026",
+        "title": "Our First Temple Visit!",
+        "description": "A magical moment together...💕",
+        "imageUrl": "/uploads/file-1785522184225-475564399.jpg"
+      },
+      {
+        "id": "mem-1785520403965",
+        "date": "June 28 , 2026",
+        "title": "Many things happened on this day🫣 ",
+        "description": "New Romantic Memory 💕",
+        "imageUrl": "/uploads/file-1785522231277-685193773.jpg"
+      }
+    ],
+    "page4": {
+      "message": "This bouquet will never dry...\nJust like my love for you 🌹✨",
+      "buttonText": "Accept My Flowers ?💐",
+      "bouquetImage": "https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=800&q=80"
+    },
+    "page5": {
+      "envelopeTitle": "A Secret Letter For You 💌",
+      "openButtonText": "Open Letter ✨",
+      "letterText": "My Dear Inchara,\n\nHappy Girlfriend's Day, my love❤️\n\nEven though miles separate us, not a single day goes by without you being on my mind. Distance has only made me realize how deeply I love you and how grateful I am to have someone as amazing as you in my life.\n\nThank you for being my happiness, my peace, my biggest supporter, and the reason I smile even on the hardest days. Every Video Call, Every call, every message, and every little moment we share means the world to me.\n\nThe best part? In just 14 more days, I'll finally get to see you again. I can't wait to hold your hand, look into your eyes, and make up for all the hugs  and kisses we've been missing.\n\nUntil then, keep smiling, take care of yourself, drink water and remember that no matter how far apart we are, my heart is always with you.\n\nI love you more than words can ever express. Once again Happy Girlfriend's Day maa❤️\n",
+      "typingSpeedMs": 40,
+      "enableTypingSound": true,
+      "couponTitle": "LIFETIME REWARD COUPON",
+      "perk1": "Unlimited Hugs 🫂",
+      "perk2": "Unlimited Kisses 💋",
+      "couponOwner": "The Love Of My Life 👑",
+      "validity": "Lifetime & Beyond"
+    },
+    "ending": {
+      "fireworkHeading": "HAPPY GIRLFRIEND'S DAY",
+      "herName": "Inchara❤️",
+      "subHeading": "I Love You Forever♾️❤️",
+      "finalNote": "Thank you for being the best part of my life",
+      "footerText": "- Forever Yours Ajay ❤️"
+    },
+    "theme": {
+      "primaryColor": "#f43f5e",
+      "secondaryColor": "#ec4899",
+      "accentColor": "#a855f7",
+      "fontFamily": "Poppins",
+      "heartColor": "#f43f5e",
+      "sparkleColor": "#fbbf24"
+    },
+    "created_at": "2026-07-31T06:48:09.257Z",
+    "updated_at": "2026-07-31T18:25:04.478Z"
+  }
+]
