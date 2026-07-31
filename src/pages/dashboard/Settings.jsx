@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   isSupabaseConfigured,
   getSupabaseCredentials,
@@ -6,16 +6,21 @@ import {
   clearSupabaseCredentials,
   testSupabaseConnection
 } from '../../lib/supabase';
-import { Database, ShieldCheck, Key, CheckCircle2, AlertCircle, RefreshCw, Trash2, PlugZap } from 'lucide-react';
+import { api } from '../../lib/api';
+import { useStore } from '../../context/StoreContext';
+import { Database, ShieldCheck, Key, CheckCircle2, AlertCircle, RefreshCw, Trash2, PlugZap, UploadCloud, Heart } from 'lucide-react';
 
 export default function Settings() {
   const currentCreds = getSupabaseCredentials();
-  
+  const { refreshWebsites, websites } = useStore();
+
   const [url, setUrl] = useState(currentCreds.url);
   const [anonKey, setAnonKey] = useState(currentCreds.anonKey);
   const [status, setStatus] = useState(isSupabaseConfigured ? 'connected' : 'disconnected');
   const [testing, setTesting] = useState(false);
+  const [pushing, setPushing] = useState(false);
   const [feedback, setFeedback] = useState(null); // { type: 'success' | 'error', text: '' }
+  const [pushFeedback, setPushFeedback] = useState(null);
 
   const handleConnect = async (e) => {
     e.preventDefault();
@@ -34,6 +39,7 @@ export default function Settings() {
     if (testResult.success) {
       setStatus('connected');
       setFeedback({ type: 'success', text: testResult.message });
+      refreshWebsites();
     } else {
       setStatus('error');
       setFeedback({ type: 'error', text: `Connection Warning: ${testResult.message}. (Ensure schema.sql has been run in Supabase SQL Editor)` });
@@ -47,6 +53,27 @@ export default function Settings() {
     setAnonKey('');
     setStatus('disconnected');
     setFeedback({ type: 'success', text: 'Supabase credentials cleared. Switched to standalone mode.' });
+    refreshWebsites();
+  };
+
+  // Push ALL available local & default websites to Supabase Database
+  const handlePushAllToSupabase = async () => {
+    setPushing(true);
+    setPushFeedback(null);
+
+    try {
+      const result = await api.syncAllWebsitesToSupabase();
+      if (result.success) {
+        setPushFeedback({ type: 'success', text: result.message });
+        refreshWebsites();
+      } else {
+        setPushFeedback({ type: 'error', text: result.message });
+      }
+    } catch (err) {
+      setPushFeedback({ type: 'error', text: err.message || 'Failed to push websites to Supabase.' });
+    } finally {
+      setPushing(false);
+    }
   };
 
   return (
@@ -58,10 +85,10 @@ export default function Settings() {
           <h1 className="text-3xl font-bold text-white flex items-center gap-2">
             Dashboard Settings ⚙️
           </h1>
-          <p className="text-xs text-pink-300">Connect your live Supabase cloud database directly from GitHub Pages or local environment</p>
+          <p className="text-xs text-pink-300">Connect your live Supabase cloud database and sync all your website data in 1 click</p>
         </div>
 
-        {/* Status Card */}
+        {/* Database Status Card */}
         <div className="glass-panel p-6 rounded-2xl border border-pink-500/20 space-y-4">
           <h2 className="text-lg font-bold text-white flex items-center gap-2">
             <Database className="w-5 h-5 text-pink-400" /> Database Connection Status
@@ -90,19 +117,68 @@ export default function Settings() {
             </div>
 
             <div className="flex items-center justify-between pt-2 border-t border-slate-800">
-              <span className="text-slate-300 font-semibold">Express Server / Browser Local Storage:</span>
-              <span className="text-emerald-400 font-bold flex items-center gap-1">
-                <ShieldCheck className="w-4 h-4" /> Active Fallback Ready
+              <span className="text-slate-300 font-semibold">Total Saved Websites Available:</span>
+              <span className="text-pink-300 font-bold font-mono">
+                {websites.length} website(s)
               </span>
             </div>
           </div>
         </div>
 
-        {/* Live Supabase Connection Form */}
+        {/* ONE-CLICK PUSH EVERYTHING TO SUPABASE BUTTON CARD */}
+        <div className="glass-card-gold p-6 sm:p-8 rounded-3xl border-2 border-yellow-400/40 shadow-2xl space-y-4 relative overflow-hidden">
+          <div className="flex items-center justify-between border-b border-yellow-400/20 pb-3">
+            <h2 className="text-xl font-bold text-white flex items-center gap-2 font-dancing">
+              <UploadCloud className="w-6 h-6 text-yellow-400" /> Push All Data & Websites to Supabase Cloud
+            </h2>
+            <span className="bg-yellow-500/20 border border-yellow-400/40 text-yellow-300 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
+              1-Click Sync
+            </span>
+          </div>
+
+          <p className="text-xs text-yellow-100/90 leading-relaxed">
+            Click the button below to immediately push all your locally saved websites, proposal texts, relationship timers, memory photo cards, letters, coupons, and grand finale settings directly into your <strong>Supabase Cloud Database</strong>!
+          </p>
+
+          {pushFeedback && (
+            <div className={`p-3.5 rounded-xl text-xs font-medium flex items-center gap-2 ${
+              pushFeedback.type === 'success'
+                ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
+                : 'bg-rose-500/20 border border-rose-500/40 text-rose-300'
+            }`}>
+              {pushFeedback.type === 'success' ? <CheckCircle2 className="w-4 h-4 shrink-0" /> : <AlertCircle className="w-4 h-4 shrink-0" />}
+              <span>{pushFeedback.text}</span>
+            </div>
+          )}
+
+          <button
+            onClick={handlePushAllToSupabase}
+            disabled={pushing || !isSupabaseConfigured}
+            className={`w-full py-4 font-bold text-sm sm:text-base rounded-2xl shadow-2xl flex items-center justify-center gap-2 cursor-pointer transition transform active:scale-98 ${
+              isSupabaseConfigured
+                ? 'bg-gradient-to-r from-yellow-400 via-pink-500 to-rose-600 hover:from-yellow-500 hover:to-rose-700 text-slate-950 shadow-yellow-500/30'
+                : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
+            }`}
+          >
+            {pushing ? (
+              <>
+                <RefreshCw className="w-5 h-5 animate-spin text-slate-950" />
+                <span>Pushing All Data to Supabase Database...</span>
+              </>
+            ) : (
+              <>
+                <UploadCloud className="w-5 h-5 text-slate-950" />
+                <span>{isSupabaseConfigured ? 'Push Everything to Supabase Database NOW 🚀' : 'Connect Supabase Credentials Below First ⚙️'}</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Live Supabase Connection Credentials Form */}
         <div className="glass-panel-pink p-6 sm:p-8 rounded-3xl border border-pink-500/30 space-y-4 shadow-2xl">
           <div className="flex items-center justify-between border-b border-pink-500/20 pb-3">
             <h2 className="text-xl font-bold text-white flex items-center gap-2 font-dancing">
-              <PlugZap className="w-5 h-5 text-pink-400" /> Connect Supabase Cloud Database
+              <PlugZap className="w-5 h-5 text-pink-400" /> Supabase Connection Credentials
             </h2>
             {isSupabaseConfigured && (
               <button
@@ -116,7 +192,7 @@ export default function Settings() {
           </div>
 
           <p className="text-xs text-pink-200/90 leading-relaxed">
-            Enter your <strong>Supabase URL</strong> and <strong>Anon Key</strong> below. Once connected, all your website configurations, custom stories, and uploaded photos will automatically sync with your live Supabase cloud database!
+            Enter your <strong>Supabase URL</strong> and <strong>Anon Key</strong> below. Once connected, all your website configurations, custom stories, and uploaded photos automatically sync with your live Supabase cloud database!
           </p>
 
           <form onSubmit={handleConnect} className="space-y-4 pt-2">
