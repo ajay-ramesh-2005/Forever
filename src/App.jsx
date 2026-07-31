@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AudioProvider } from './context/AudioContext';
 import { StoreProvider } from './context/StoreContext';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -11,10 +11,6 @@ import WebsiteEditor from './pages/dashboard/WebsiteEditor';
 import SavedWebsites from './pages/dashboard/SavedWebsites';
 import Settings from './pages/dashboard/Settings';
 import Login from './pages/Login';
-
-// Detect if running on GitHub Pages to choose optimal router
-const isGitHubPages = typeof window !== 'undefined' && window.location.hostname.includes('github.io');
-const Router = isGitHubPages ? HashRouter : BrowserRouter;
 
 export default function App() {
   return (
