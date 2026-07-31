@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { getPublicHref } from '../lib/utils';
 import { Heart, Plus, FolderHeart, Settings, LayoutDashboard, ExternalLink } from 'lucide-react';
 
 export default function Navbar() {
@@ -66,7 +67,7 @@ export default function Navbar() {
           </Link>
 
           <a
-            href="/love/forever-us"
+            href={getPublicHref('forever-us')}
             target="_blank"
             rel="noreferrer"
             className="ml-2 px-3.5 py-2 bg-gradient-to-r from-pink-500 to-rose-600 text-white rounded-xl flex items-center gap-1.5 shadow transition hover:opacity-90"

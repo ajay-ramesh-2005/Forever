@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Monitor, Tablet, Smartphone, ExternalLink, RefreshCw, Save, CheckCircle } from 'lucide-react';
+import { getPublicHref } from '../lib/utils';
 
 export default function DeviceFrame({ children, publicSlug, onSave, saving = false, saveSuccess = false }) {
   const [device, setDevice] = useState('desktop'); // desktop, tablet, mobile
@@ -90,7 +91,7 @@ export default function DeviceFrame({ children, publicSlug, onSave, saving = fal
 
           {publicSlug && (
             <a
-              href={`/love/${publicSlug}`}
+              href={getPublicHref(publicSlug)}
               target="_blank"
               rel="noreferrer"
               className="p-2 rounded-xl bg-pink-500/20 border border-pink-500/40 text-pink-300 hover:bg-pink-500/30 text-xs font-semibold flex items-center gap-1 transition"

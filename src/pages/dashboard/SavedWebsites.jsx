@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../../context/StoreContext';
+import { getPublicUrl, getPublicHref } from '../../lib/utils';
 import {
   ExternalLink,
   Edit,
@@ -20,7 +21,7 @@ export default function SavedWebsites() {
   const [copiedId, setCopiedId] = useState(null);
 
   const handleCopyLink = (slug, id) => {
-    const url = `${window.location.origin}/love/${slug}`;
+    const url = getPublicUrl(slug);
     navigator.clipboard.writeText(url);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2500);
@@ -99,7 +100,7 @@ export default function SavedWebsites() {
                 <div className="space-y-3 pt-4 border-t border-pink-500/20">
                   <div className="grid grid-cols-2 gap-2">
                     <a
-                      href={`/love/${ws.slug}`}
+                      href={getPublicHref(ws.slug)}
                       target="_blank"
                       rel="noreferrer"
                       className="px-3 py-2 bg-pink-500/20 hover:bg-pink-500/30 border border-pink-500/40 text-pink-200 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition"
