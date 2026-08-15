@@ -67,6 +67,20 @@ export default function PublicStoryView({ configOverride }) {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 relative overflow-hidden select-none">
       
+      {/* Floating Creator Dashboard Shortcut */}
+      {!configOverride && (
+        <div className="fixed top-4 left-4 z-50">
+          <a
+            href="#/dashboard"
+            className="px-3.5 py-2 bg-slate-900/80 hover:bg-slate-800 text-pink-300 hover:text-white border border-pink-500/30 rounded-full text-xs font-semibold flex items-center gap-2 backdrop-blur-md shadow-xl transition transform hover:scale-105"
+            title="Open Creator Dashboard"
+          >
+            <span className="w-2 h-2 rounded-full bg-pink-400 animate-pulse"></span>
+            <span>Dashboard ⚙️</span>
+          </a>
+        </div>
+      )}
+
       {/* Background Particles & Cursor Trails */}
       <FloatingParticles count={25} />
       <CursorHearts active={currentPage === 1} />
