@@ -67,8 +67,8 @@ export default function PublicStoryView({ configOverride }) {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 relative overflow-hidden select-none">
       
-      {/* Floating Creator Dashboard Shortcut */}
-      {!configOverride && (
+      {/* Floating Creator Dashboard Shortcut (Only shown on main home page, hidden on saved websites) */}
+      {!configOverride && !slug && (
         <div className="fixed top-4 left-4 z-50">
           <a
             href="#/dashboard"
