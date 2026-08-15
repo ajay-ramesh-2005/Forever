@@ -12,8 +12,10 @@ import {
   Calendar,
   Sparkles,
   Heart,
-  Check
+  Check,
+  Download
 } from 'lucide-react';
+import { downloadWebsiteHTML } from '../../lib/exportWebsite';
 
 export default function SavedWebsites() {
   const { websites, deleteWebsite, duplicateWebsite, loading } = useStore();
@@ -137,6 +139,15 @@ export default function SavedWebsites() {
                     </button>
 
                     <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => downloadWebsiteHTML(ws)}
+                        className="px-2.5 py-1.5 bg-pink-500/10 hover:bg-pink-500/20 text-pink-300 border border-pink-500/30 rounded-lg text-xs font-semibold flex items-center gap-1 transition"
+                        title="Download Standalone HTML Code"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                        <span>Code</span>
+                      </button>
+
                       <button
                         onClick={() => duplicateWebsite(ws)}
                         className="p-2 text-slate-400 hover:text-pink-300 bg-slate-900 border border-slate-800 hover:bg-slate-800 rounded-lg transition"

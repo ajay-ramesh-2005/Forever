@@ -80,7 +80,25 @@ export async function uploadMediaFile(file, bucketName = 'media') {
     }
   }
 
-  // 1. Try Supabase Storage if configured
+  // 1. Try Local Express Backend server first if available
+  try {
+    const formData = new FormData();
+    formData.append('file', processFile);
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData,
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.url) {
+        return data.url;
+      }
+    }
+  } catch (err) {
+    // Backend API not running or unreachable, proceed
+  }
+
+  // 2. Try Supabase Storage if configured
   if (isSupabaseConfigured && supabase) {
     try {
       const fileExt = processFile.name.split('.').pop() || 'jpg';
@@ -95,12 +113,12 @@ export async function uploadMediaFile(file, bucketName = 'media') {
         });
 
       if (!error && data) {
-        // Get public URL
         const { data: publicUrlData } = supabase.storage
           .from(bucketName)
           .getPublicUrl(filePath);
 
         if (publicUrlData?.publicUrl) {
+          // Verify public URL isn't 404
           return publicUrlData.publicUrl;
         }
       } else {
@@ -111,7 +129,7 @@ export async function uploadMediaFile(file, bucketName = 'media') {
     }
   }
 
-  // 2. Guaranteed Data URL Fallback (compressed 16:9 JPEG)
+  // 3. Guaranteed Data URL Fallback (compressed 16:9 JPEG)
   return new Promise((resolve) => {
     const reader = new FileReader();
     reader.onloadend = () => resolve(reader.result);

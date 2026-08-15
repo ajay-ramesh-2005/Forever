@@ -34,37 +34,62 @@ export function saveLocalWebsites(websites) {
 
 // Unified API Service
 export const api = {
-  // Fetch all saved websites
+  // Fetch all saved websites, merging Supabase and LocalStorage by newest updated_at
   async getAllWebsites() {
+    const localList = getLocalWebsites();
+    let supabaseList = [];
+
     // Try Supabase if configured
     if (isSupabaseConfigured && supabase) {
       try {
         const { data, error } = await supabase.from('websites').select('*').order('updated_at', { ascending: false });
-        if (!error && data && data.length > 0) {
-          return data;
+        if (!error && data) {
+          supabaseList = data;
         }
       } catch (err) {
-        console.warn('Supabase fetch error, using local storage fallback:', err);
+        console.warn('Supabase fetch error:', err);
       }
     }
 
-    // Try backend API next
-    try {
-      const res = await fetch('/api/websites');
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data) && data.length > 0) {
-          return data;
+    // Try backend API next if supabase didn't return data
+    if (supabaseList.length === 0) {
+      try {
+        const res = await fetch('/api/websites');
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            supabaseList = data;
+          }
+        }
+      } catch (e) {}
+    }
+
+    // Merge lists using newest updated_at
+    const mergedMap = new Map();
+    [...localList, ...supabaseList].forEach((item) => {
+      const key = item.id || item.slug;
+      if (!key) return;
+      const existing = mergedMap.get(key);
+      if (!existing) {
+        mergedMap.set(key, item);
+      } else {
+        const tExisting = new Date(existing.updated_at || 0).getTime();
+        const tItem = new Date(item.updated_at || 0).getTime();
+        if (tItem >= tExisting) {
+          mergedMap.set(key, item);
         }
       }
-    } catch (e) {}
+    });
 
-    // Fallback to local storage
-    return getLocalWebsites();
+    return Array.from(mergedMap.values());
   },
 
-  // Get website by ID or Slug
+  // Get website by ID or Slug, choosing newest version
   async getWebsiteBySlug(slugOrId) {
+    const localList = getLocalWebsites();
+    const localFound = localList.find(w => w.slug === slugOrId || w.id === slugOrId);
+
+    let supabaseFound = null;
     // Try Supabase
     if (isSupabaseConfigured && supabase) {
       try {
@@ -73,22 +98,28 @@ export const api = {
           .select('*')
           .or(`id.eq.${slugOrId},slug.eq.${slugOrId}`)
           .single();
-        if (!error && data) return data;
+        if (!error && data) {
+          supabaseFound = data;
+        }
       } catch (e) {}
     }
 
-    // Try backend API
-    try {
-      const res = await fetch(`/api/websites/${slugOrId}`);
-      if (res.ok) {
-        return await res.json();
-      }
-    } catch (e) {}
+    if (!supabaseFound) {
+      try {
+        const res = await fetch(`/api/websites/${slugOrId}`);
+        if (res.ok) {
+          supabaseFound = await res.json();
+        }
+      } catch (e) {}
+    }
 
-    // Local storage fallback
-    const list = getLocalWebsites();
-    const found = list.find(w => w.slug === slugOrId || w.id === slugOrId);
-    return found || DEFAULT_WEBSITE_CONFIG;
+    if (localFound && supabaseFound) {
+      const tLocal = new Date(localFound.updated_at || 0).getTime();
+      const tSupabase = new Date(supabaseFound.updated_at || 0).getTime();
+      return tLocal >= tSupabase ? localFound : supabaseFound;
+    }
+
+    return localFound || supabaseFound || DEFAULT_WEBSITE_CONFIG;
   },
 
   // Save/Create/Update website

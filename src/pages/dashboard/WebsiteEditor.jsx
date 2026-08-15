@@ -20,8 +20,10 @@ import {
   Eye,
   Settings,
   CheckCircle,
-  Upload
+  Upload,
+  Download
 } from 'lucide-react';
+import { downloadWebsiteHTML } from '../../lib/exportWebsite';
 
 export default function WebsiteEditor({ editExisting = false }) {
   const { slug } = useParams();
@@ -45,8 +47,13 @@ export default function WebsiteEditor({ editExisting = false }) {
       const parts = path.split('.');
       let curr = copy;
       for (let i = 0; i < parts.length - 1; i++) {
-        if (!curr[parts[i]]) curr[parts[i]] = {};
-        curr = curr[parts[i]];
+        const key = parts[i];
+        const nextKey = parts[i + 1];
+        const isNextKeyIndex = !isNaN(Number(nextKey));
+        if (!curr[key]) {
+          curr[key] = isNextKeyIndex ? [] : {};
+        }
+        curr = curr[key];
       }
       curr[parts[parts.length - 1]] = value;
       return copy;
@@ -130,8 +137,17 @@ export default function WebsiteEditor({ editExisting = false }) {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 p-4 sm:p-8 relative">
       
-      {/* ALWAYS VISIBLE STICKY TOP-RIGHT FLOATING SAVE BUTTON */}
-      <div className="fixed top-20 right-4 sm:right-8 z-50">
+      {/* ALWAYS VISIBLE STICKY TOP-RIGHT FLOATING ACTION BUTTONS */}
+      <div className="fixed top-20 right-4 sm:right-8 z-50 flex items-center gap-2">
+        <button
+          onClick={() => downloadWebsiteHTML(form)}
+          className="px-4 py-3 bg-slate-900/90 hover:bg-slate-800 text-pink-300 font-bold text-xs sm:text-sm rounded-full shadow-xl border border-pink-500/40 backdrop-blur-md flex items-center gap-1.5 transition cursor-pointer"
+          title="Download Standalone HTML Code"
+        >
+          <Download className="w-4 h-4 text-pink-400" />
+          <span className="hidden sm:inline">Download Code</span>
+        </button>
+
         <button
           onClick={handleSave}
           disabled={saving}

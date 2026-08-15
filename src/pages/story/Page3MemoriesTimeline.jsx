@@ -3,17 +3,22 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Calendar, Heart, ArrowRight, Sparkles } from 'lucide-react';
 
 export default function Page3MemoriesTimeline({ config, onNext }) {
-  const memories = config?.memories && config.memories.length > 0
-    ? config.memories
-    : [
-        {
-          id: '1',
-          date: 'August 1, 2023',
-          title: 'The Day We First Met ☕',
-          description: 'It felt like time stood still. The moment you smiled, I knew my life was changed forever.',
-          imageUrl: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'
-        }
-      ];
+  const rawMemories = config?.memories;
+  const memoriesList = Array.isArray(rawMemories) && rawMemories.length > 0
+    ? rawMemories
+    : (rawMemories && typeof rawMemories === 'object' && Object.values(rawMemories).length > 0
+        ? Object.values(rawMemories)
+        : [
+            {
+              id: '1',
+              date: 'August 1, 2023',
+              title: 'The Day We First Met ☕',
+              description: 'It felt like time stood still. The moment you smiled, I knew my life was changed forever.',
+              imageUrl: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'
+            }
+          ]);
+
+  const memories = memoriesList;
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
