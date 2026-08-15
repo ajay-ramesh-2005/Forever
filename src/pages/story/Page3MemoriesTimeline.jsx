@@ -55,7 +55,7 @@ export default function Page3MemoriesTimeline({ config, onNext }) {
           <Sparkles className="w-4 h-4" />
         </div>
         <h2 className="text-3xl sm:text-5xl font-bold font-dancing text-white drop-shadow-lg">
-          Journey Through Our Memories ✨
+          Journey Through Our Memories
         </h2>
       </motion.div>
 
