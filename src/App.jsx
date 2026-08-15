@@ -34,6 +34,9 @@ export default function App() {
                   <Route path="/dashboard/settings" element={<Settings />} />
                   <Route path="/login" element={<Login />} />
 
+                  {/* Custom direct website route e.g. /custom-name */}
+                  <Route path="/:slug" element={<PublicStoryView />} />
+
                   {/* Fallback */}
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>

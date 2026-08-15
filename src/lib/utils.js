@@ -4,10 +4,10 @@
  */
 
 export function getPublicUrl(slug = 'forever-us') {
-  if (typeof window === 'undefined') return `#/love/${slug}`;
+  if (typeof window === 'undefined') return `/#/love/${slug}`;
   const isGithub = window.location.hostname.includes('github.io');
   if (isGithub) {
-    return `${window.location.origin}/frever/#/love/${slug}`;
+    return `${window.location.origin}/Forever/#/love/${slug}`;
   }
   return `${window.location.origin}/#/love/${slug}`;
 }

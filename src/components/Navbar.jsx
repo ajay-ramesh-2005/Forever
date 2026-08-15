@@ -7,8 +7,8 @@ export default function Navbar() {
   const location = useLocation();
   const path = location.pathname;
 
-  // Don't show Dashboard navbar when viewing public story `/love/:slug` or root `/` story
-  if (path.startsWith('/love/')) return null;
+  // Don't show Dashboard navbar when viewing public story `/love/:slug` or `/:slug` or root `/`
+  if (path === '/' || path.startsWith('/love/') || (!path.startsWith('/dashboard') && path !== '/login')) return null;
 
   return (
     <header className="bg-slate-950/80 backdrop-blur-xl border-b border-pink-500/20 sticky top-0 z-40">
